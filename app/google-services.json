@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "927769892725",
+    "project_id": "iotsensorshop",
+    "storage_bucket": "iotsensorshop.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:927769892725:android:368cbe3b3e03cfeda6253c",
+        "android_client_info": {
+          "package_name": "com.example.iotsensorshop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "927769892725-oeo6lrec3m2fjei2mjdinjkqr3srt5ap.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAi2dvlekVffKXKmWEkmJ_7kRp7brldrB4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "927769892725-oeo6lrec3m2fjei2mjdinjkqr3srt5ap.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
