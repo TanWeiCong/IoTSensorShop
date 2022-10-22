@@ -23,13 +23,25 @@
         android:textStyle = "bold"
         android:text="User Profile"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="60dp"/>
+
+    <ImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/img_profile"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/profile"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/displayName"
         android:layout_width = "match_parent"
         android:layout_height = "wrap_content"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="10dp">
 
         <TextView
             android:id="@+id/userName"
@@ -72,25 +84,11 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/btn_changeUserName"
+        android:id="@+id/edit_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Change UserName"
-        android:layout_marginTop="50dp"/>
-
-    <Button
-        android:id="@+id/btn_changeEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Change Email"
-        android:layout_marginTop="10dp"/>
-
-    <Button
-        android:id="@+id/btn_changePassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Change Password" />
-
+        android:layout_marginTop="50dp"
+        android:text="Edit Profile"
+        android:layout_gravity="center"/>
 
 </LinearLayout>

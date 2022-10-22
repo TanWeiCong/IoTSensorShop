@@ -69,7 +69,7 @@ public class OnBoardingActivity extends AppCompatActivity {
         }
 
         if(dots.length > 0) {
-            dots[position].setTextColor(getResources().getColor(R.color.pink));
+            dots[position].setTextColor(getResources().getColor(R.color.grey));
         }
     }
 

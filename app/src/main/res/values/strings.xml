@@ -17,4 +17,9 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="manage_products">Manage Products</string>
+    <string name="purchase_history">Purchase History</string>
+    <string name="order">Order</string>
+    <string name="chat_room">Chat Room</string>
+    <string name="chat_bot">Chatbot</string>
+    <string name="video_call">Video Conference</string>
 </resources>

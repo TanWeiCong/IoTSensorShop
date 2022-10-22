@@ -36,6 +36,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     FirebaseFirestore fStore;
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+
     String userId;
     int clickcount;
 
@@ -186,11 +187,50 @@ public class RegistrationActivity extends AppCompatActivity {
                            user.put("Email", userEmail);
                            if (mRegisterBtn.getText().toString().equals("Sign Up")) {
                                user.put("userType", "User");
+                               databaseReference.child("users").child(auth.getCurrentUser().getUid()).child("user").setValue("User").addOnCompleteListener(new OnCompleteListener<Void>() {
+                                   @Override
+                                   public void onComplete(@NonNull Task<Void> task) {
+                                       if (task.isSuccessful()) {
+                                       }
+                                   }
+                               }).addOnFailureListener(new OnFailureListener() {
+                                   @Override
+                                   public void onFailure(@NonNull Exception e) {
+                                       Toast.makeText(RegistrationActivity.this, "Failure in saving data : " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                   }
+                               });
                            } else {
                                user.put("userType", "Admin");
+                               databaseReference.child("users").child(auth.getCurrentUser().getUid()).child("user").setValue("Admin").addOnCompleteListener(new OnCompleteListener<Void>() {
+                                   @Override
+                                   public void onComplete(@NonNull Task<Void> task) {
+                                       if (task.isSuccessful()) {
+                                       }
+                                   }
+                               }).addOnFailureListener(new OnFailureListener() {
+                                   @Override
+                                   public void onFailure(@NonNull Exception e) {
+                                       Toast.makeText(RegistrationActivity.this, "Failure in saving data : " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                   }
+                               });
                            }
                            documentReference.set(user);
+
+                           databaseReference.child("users").child(auth.getCurrentUser().getUid()).child("email").setValue(userEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
+                               @Override
+                               public void onComplete(@NonNull Task<Void> task) {
+                                   if (task.isSuccessful()) {
+                                   }
+                               }
+                           }).addOnFailureListener(new OnFailureListener() {
+                               @Override
+                               public void onFailure(@NonNull Exception e) {
+                                   Toast.makeText(RegistrationActivity.this, "Failure in saving data : " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                               }
+                           });
+
                            startActivity(new Intent(RegistrationActivity.this, MainActivity.class));
+
                        }else {
 
                            if (task.getException() instanceof FirebaseAuthUserCollisionException) {

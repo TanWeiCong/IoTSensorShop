@@ -2,6 +2,7 @@ package com.example.iotsensorshop.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -30,13 +31,15 @@ import androidx.appcompat.widget.Toolbar;
 public class DetailedActivity extends AppCompatActivity {
 
     ImageView detailedImg;
-    TextView rating, name, description, price, quantity;
-    Button addToCart, buyNow;
+    TextView name, description, price, quantity;
+    Button addToCart;
     ImageView addItems, removeItems;
 
     Toolbar toolbar;
     int totalQuantity = 1;
     int totalPrice = 0;
+
+    //String documentId = "";
 
     //New Products
     NewProductsModel newProductsModel = null;
@@ -54,6 +57,8 @@ public class DetailedActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailed);
+
+        //documentId = getIntent().getStringExtra("pid");
 
         toolbar = findViewById(R.id.detailed_toolbar);
         setSupportActionBar(toolbar);
@@ -82,12 +87,11 @@ public class DetailedActivity extends AppCompatActivity {
         detailedImg = findViewById(R.id.detailed_img);
         quantity = findViewById(R.id.quantity);
         name = findViewById(R.id.detailed_name);
-        rating = findViewById(R.id.rating);
         description = findViewById(R.id.detailed_desc);
+        description.setMovementMethod(new ScrollingMovementMethod());
         price = findViewById(R.id.detailed_price);
 
         addToCart = findViewById(R.id.add_to_cart);
-        buyNow = findViewById(R.id.buy_now);
 
         addItems = findViewById(R.id.add_item);
         removeItems = findViewById(R.id.remove_item);
@@ -96,7 +100,6 @@ public class DetailedActivity extends AppCompatActivity {
         if (newProductsModel != null){
             Glide.with(getApplicationContext()).load(newProductsModel.getImg_url()).into(detailedImg);
             name.setText(newProductsModel.getName());
-            rating.setText(newProductsModel.getRating());
             description.setText(newProductsModel.getDescription());
             price.setText(String.valueOf(newProductsModel.getPrice()));
             name.setText(newProductsModel.getName());
@@ -108,7 +111,6 @@ public class DetailedActivity extends AppCompatActivity {
         if (popularProductsModel != null){
             Glide.with(getApplicationContext()).load(popularProductsModel.getImg_url()).into(detailedImg);
             name.setText(popularProductsModel.getName());
-            rating.setText(popularProductsModel.getRating());
             description.setText(popularProductsModel.getDescription());
             price.setText(String.valueOf(popularProductsModel.getPrice()));
             name.setText(popularProductsModel.getName());
@@ -120,33 +122,12 @@ public class DetailedActivity extends AppCompatActivity {
         if (showAllModel != null){
             Glide.with(getApplicationContext()).load(showAllModel.getImg_url()).into(detailedImg);
             name.setText(showAllModel.getName());
-            rating.setText(showAllModel.getRating());
             description.setText(showAllModel.getDescription());
             price.setText(String.valueOf(showAllModel.getPrice()));
             name.setText(showAllModel.getName());
 
             totalPrice = showAllModel.getPrice() * totalQuantity;
         }
-
-        //Buy Now
-        buyNow.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(DetailedActivity.this, AddressActivity.class);
-
-                if(newProductsModel != null){
-                    intent.putExtra("item", newProductsModel);
-                }
-                if(popularProductsModel != null){
-                    intent.putExtra("item", popularProductsModel);
-                }
-                if(showAllModel != null){
-                    intent.putExtra("item", showAllModel);
-                }
-
-                startActivity(intent);
-            }
-        });
 
         //Add To Cart
         addToCart.setOnClickListener(new View.OnClickListener(){
@@ -159,7 +140,7 @@ public class DetailedActivity extends AppCompatActivity {
         addItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (totalQuantity < 10){
+                if (totalQuantity < 50){
                     totalQuantity ++;
                     quantity.setText(String.valueOf(totalQuantity));
 
@@ -172,6 +153,8 @@ public class DetailedActivity extends AppCompatActivity {
                     if (showAllModel != null)  {
                         totalPrice = showAllModel.getPrice() * totalQuantity;
                     }
+                }else {
+                    Toast.makeText(DetailedActivity.this, "The Maximum Quantity is 50!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -183,6 +166,8 @@ public class DetailedActivity extends AppCompatActivity {
                 if (totalQuantity > 1){
                     totalQuantity --;
                     quantity.setText(String.valueOf(totalQuantity));
+                }else {
+                    Toast.makeText(DetailedActivity.this, "The Minimum Quantity is 1!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -209,7 +194,8 @@ public class DetailedActivity extends AppCompatActivity {
         cartMap.put("totalPrice", totalPrice);
 
         firestore.collection("AddToCart").document(auth.getCurrentUser().getUid())
-                .collection("User").add(cartMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                .collection("User")
+                .add(cartMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
                 Toast.makeText(DetailedActivity.this, "Added To A Cart", Toast.LENGTH_SHORT).show();

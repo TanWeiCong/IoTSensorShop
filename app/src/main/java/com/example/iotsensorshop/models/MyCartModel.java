@@ -1,7 +1,10 @@
 package com.example.iotsensorshop.models;
 
-public class MyCartModel {
+import java.io.Serializable;
 
+public class MyCartModel implements Serializable {
+
+    String documentId;
     String currentTime;
     String currentDate;
     String productName;
@@ -12,13 +15,22 @@ public class MyCartModel {
     public MyCartModel() {
     }
 
-    public MyCartModel(String currentTime, String currentDate, String productName, String productPrice, String totalQuantity, int totalPrice) {
+    public MyCartModel(String documentId, String currentTime, String currentDate, String productName, String productPrice, String totalQuantity, int totalPrice) {
+        this.documentId = documentId;
         this.currentTime = currentTime;
         this.currentDate = currentDate;
         this.productName = productName;
         this.productPrice = productPrice;
         this.totalQuantity = totalQuantity;
         this.totalPrice = totalPrice;
+    }
+
+    public String getDocumentId() {
+        return documentId;
+    }
+
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
     }
 
     public String getCurrentTime() {

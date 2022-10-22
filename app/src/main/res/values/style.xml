@@ -2,7 +2,7 @@
 <resources>
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">#25389F</item>
-        <item name="colorPrimaryDark">#ff5ccb</item>
+        <item name="colorPrimaryDark">#003549</item>
         <item name="colorAccent">#FF6155</item>
     </style>
 

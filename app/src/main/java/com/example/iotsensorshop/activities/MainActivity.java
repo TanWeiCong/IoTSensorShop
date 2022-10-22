@@ -20,24 +20,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.iotsensorshop.R;
-import com.example.iotsensorshop.adapters.CategoryAdapter;
-import com.example.iotsensorshop.adapters.NewProductsAdapter;
 import com.example.iotsensorshop.fragments.CategoryFragment;
+import com.example.iotsensorshop.fragments.ChatRoomFragment;
+import com.example.iotsensorshop.fragments.ChatbotFragment;
+import com.example.iotsensorshop.fragments.DashboardFragment;
 import com.example.iotsensorshop.fragments.HomeFragment;
+import com.example.iotsensorshop.fragments.ManageProductFragment;
 import com.example.iotsensorshop.fragments.MyCartFragment;
 import com.example.iotsensorshop.fragments.NewProductsFragment;
+import com.example.iotsensorshop.fragments.OrderFragment;
 import com.example.iotsensorshop.fragments.ProfileFragment;
+import com.example.iotsensorshop.fragments.PurchaseHistoryFragment;
 import com.example.iotsensorshop.models.UserModel;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.auth.User;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -169,6 +170,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         new MyCartFragment()).commit();
                 break;
 
+            case R.id.nav_manage_products:
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.home_container,
+                        new ManageProductFragment()).commit();
+                break;
+
+            case R.id.nav_purchase_history:
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.home_container,
+                        new PurchaseHistoryFragment()).commit();
+                break;
+
+            case R.id.nav_chat_room:
+                getSupportFragmentManager().beginTransaction().replace(R.id.home_container,
+                        new ChatRoomFragment()).commit();
+                break;
+
             case R.id.nav_logout:
 
                 auth.signOut();
@@ -176,6 +194,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 finish();
                 break;
 
+            case R.id.nav_order:
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.home_container,
+                        new OrderFragment()).commit();
+                break;
+
+            case R.id.nav_chat_bot:
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.home_container,
+                        new ChatbotFragment()).commit();
+                break;
+
+            case R.id.nav_video_call:
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.home_container,
+                        new DashboardFragment()).commit();
+                break;
         }
 
         drawer.closeDrawer(GravityCompat.START);

@@ -5,21 +5,23 @@ import java.io.Serializable;
 public class ShowAllModel implements Serializable {
     String description;
     String name;
-    String rating;
     int price;
     String img_url;
     String type;
+    String documentId;
+    int stock;
 
     public ShowAllModel() {
     }
 
-    public ShowAllModel(String description, String name, String rating, int price, String img_url, String type) {
+    public ShowAllModel(String description, String name, int price, String img_url, String type, String documentId, int stock) {
         this.description = description;
         this.name = name;
-        this.rating = rating;
         this.price = price;
         this.img_url = img_url;
         this.type = type;
+        this.documentId = documentId;
+        this.stock = stock;
     }
 
     public String getDescription() {
@@ -36,14 +38,6 @@ public class ShowAllModel implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getRating() {
-        return rating;
-    }
-
-    public void setRating(String rating) {
-        this.rating = rating;
     }
 
     public int getPrice() {
@@ -68,5 +62,21 @@ public class ShowAllModel implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getDocumentId() {
+        return documentId;
+    }
+
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
     }
 }

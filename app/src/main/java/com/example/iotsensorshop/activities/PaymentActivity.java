@@ -1,8 +1,10 @@
 package com.example.iotsensorshop.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,17 +15,41 @@ import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.iotsensorshop.R;
+import com.example.iotsensorshop.adapters.PurchaseHistoryAdapter;
+import com.example.iotsensorshop.fragments.PurchaseHistoryFragment;
+import com.example.iotsensorshop.models.PurchaseHistoryModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class PaymentActivity extends AppCompatActivity implements PaymentResultListener {
 
     double amount = 0.0;
+    String userId;
+    String name;
+    String email;
+    String userType;
     Toolbar toolbar;
     TextView subTotal, discount, shipping, total;
     Button paymentBtn;
+    List<PurchaseHistoryModel> list;
+    PurchaseHistoryAdapter purchaseHistoryAdapter;
+
+    FirebaseAuth auth = FirebaseAuth.getInstance();
+    FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +64,9 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                startActivity(new Intent(PaymentActivity.this, AddressActivity.class));
             }
         });
-
-        amount = getIntent().getDoubleExtra("amount", 0.0);
 
         subTotal = findViewById(R.id.sub_total);
         discount = findViewById(R.id.discount);
@@ -50,12 +74,87 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
         total = findViewById(R.id.total_amt);
         paymentBtn = findViewById(R.id.pay_btn);
 
+        userId = auth.getCurrentUser().getUid();
+
         subTotal.setText(amount + "$");
         
         paymentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                paymentMethod();
+                //paymentMethod();
+
+                firestore.collection("AddToCart")
+                        .document(auth.getCurrentUser().getUid())
+                        .collection("User")
+                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+                            for (DocumentSnapshot doc :task.getResult()) {
+                                String documentId = doc.getId();
+                                DocumentReference documentReference = firestore.collection("AddToCart")
+                                        .document(auth.getCurrentUser().getUid())
+                                        .collection("User")
+                                        .document(documentId);
+
+                                documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            DocumentSnapshot documentSnapshot = task.getResult();
+
+                                            Map<String, Object> productDetail = new HashMap<>();
+                                            productDetail.put("currentDate", documentSnapshot.getString("currentDate"));
+                                            productDetail.put("currentTime", documentSnapshot.getString("currentTime"));
+                                            productDetail.put("productName", documentSnapshot.getString("productName"));
+                                            productDetail.put("productPrice", documentSnapshot.getString("productPrice"));
+                                            productDetail.put("totalPrice", documentSnapshot.getDouble("totalPrice").intValue());
+                                            productDetail.put("totalQuantity", documentSnapshot.getString("totalQuantity"));
+
+                                            firestore.collection("PurchaseHistory").document(auth.getCurrentUser().getUid())
+                                                    .collection("User")
+                                                    .add(productDetail);
+
+                                            firestore.collection("AddToCart").document(auth.getCurrentUser().getUid())
+                                                    .collection("User")
+                                                    .document(documentId)
+                                                    .delete();
+
+                                            DocumentReference documentReferenceOrder = firestore.collection("users").document(userId);
+                                            documentReferenceOrder.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                @Override
+                                                public void onSuccess(DocumentSnapshot documentSnapshotOrder) {
+                                                    if(documentSnapshotOrder.exists()) {
+                                                        name = documentSnapshotOrder.getString("Name");
+                                                        email = documentSnapshotOrder.getString("Email");
+
+                                                        Map<String, Object> order = new HashMap<>();
+                                                        order.put("currentDate", documentSnapshot.getString("currentDate"));
+                                                        order.put("currentTime", documentSnapshot.getString("currentTime"));
+                                                        order.put("productName", documentSnapshot.getString("productName"));
+                                                        order.put("productPrice", documentSnapshot.getString("productPrice"));
+                                                        order.put("totalPrice", documentSnapshot.getDouble("totalPrice").intValue());
+                                                        order.put("totalQuantity", documentSnapshot.getString("totalQuantity"));
+                                                        order.put("name", name);
+                                                        order.put("email", email);
+
+                                                        firestore.collection("Order")
+                                                                .add(order);
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    }
+                });
+
+                Toast.makeText(PaymentActivity.this, "Payment Successful", Toast.LENGTH_SHORT).show();
+
+                startActivity(new Intent(PaymentActivity.this, MainActivity.class));
+
             }
         });
     }
@@ -99,6 +198,8 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
     @Override
     public void onPaymentSuccess(String s) {
         Toast.makeText(this, "Payment Successful", Toast.LENGTH_SHORT).show();
+
+
     }
 
     @Override

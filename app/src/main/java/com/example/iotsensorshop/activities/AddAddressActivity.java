@@ -43,7 +43,8 @@ public class AddAddressActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+
+                startActivity(new Intent(AddAddressActivity.this, AddressActivity.class));
             }
         });
 
