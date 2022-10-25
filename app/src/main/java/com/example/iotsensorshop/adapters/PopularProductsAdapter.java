@@ -81,15 +81,11 @@ public class PopularProductsAdapter extends RecyclerView.Adapter<PopularProducts
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()) {
-                    name = documentSnapshot.getString("Name");
-                    email = documentSnapshot.getString("Email");
                     userType = documentSnapshot.getString("userType");
-                    UserModel user = new UserModel(userId, name, email, userType);
 
-                    if (user.getUserType().equals("Admin")) {
-                        holder.mDeleteItem.setEnabled(true);
+                    if (userType.equals("Admin")) {
+                        holder.mDeleteItem.setVisibility(View.VISIBLE);
                     }
-
                 }
             }
         });

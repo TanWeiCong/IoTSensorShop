@@ -116,6 +116,9 @@ public class DetailedActivity extends AppCompatActivity {
 
                     if (userType.equals("User")) {
                         addToCart.setVisibility(View.VISIBLE);
+                        addItems.setVisibility(View.VISIBLE);
+                        removeItems.setVisibility(View.VISIBLE);
+                        quantity.setVisibility(View.VISIBLE);
                     }
                 }
             }

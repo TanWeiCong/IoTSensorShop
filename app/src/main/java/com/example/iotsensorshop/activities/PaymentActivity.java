@@ -201,7 +201,6 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
 
                                                         firestore.collection("Order")
                                                                 .add(order);
-
                                                     }
                                                 }
                                             });

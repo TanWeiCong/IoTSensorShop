@@ -54,11 +54,18 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.address.setText(addressModelList.get(position).getUserAddress());
-        if (!(holder.radioButton.isChecked())) {
-            Toast.makeText(context, "Please select an address!", Toast.LENGTH_SHORT).show();
-        } else {
-            mBoolean = true;
-        }
+        holder.radioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final HashMap<String, Object> cartMap = new HashMap<>();
+
+                cartMap.put("address", (addressModelList.get(holder.getAdapterPosition()).getUserAddress()));
+
+                firestore.collection("orderAddress").document(auth.getCurrentUser().getUid())
+                        .collection("User")
+                        .add(cartMap);
+            }
+        });
     }
 
     @Override

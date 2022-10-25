@@ -119,7 +119,8 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/plusicon"
-                    android:id="@+id/add_item"/>
+                    android:id="@+id/add_item"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/quantity"
@@ -127,14 +128,16 @@
                     android:layout_height="wrap_content"
                     android:text="1"
                     android:textSize="30sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:visibility="gone"/>
 
                 <ImageView
                     android:layout_marginLeft="7dp"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/iconminus"
-                    android:id="@+id/remove_item"/>
+                    android:id="@+id/remove_item"
+                    android:visibility="gone"/>
 
             </LinearLayout>
 

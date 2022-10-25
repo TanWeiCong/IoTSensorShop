@@ -28,10 +28,6 @@
             android:id="@+id/nav_chat_bot"
             android:icon="@drawable/ic_bot"
             android:title="@string/chat_bot" />
-        <item
-            android:id="@+id/nav_video_call"
-            android:icon="@drawable/video_call"
-            android:title="@string/video_call" />
     </group>
 
     <item android:title="Others">
