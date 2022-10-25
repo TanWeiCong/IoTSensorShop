@@ -14,10 +14,13 @@ import com.example.iotsensorshop.R;
 import com.example.iotsensorshop.models.NewProductsModel;
 import com.example.iotsensorshop.models.PopularProductsModel;
 import com.example.iotsensorshop.models.ShowAllModel;
+import com.example.iotsensorshop.models.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
@@ -35,9 +38,12 @@ public class DetailedActivity extends AppCompatActivity {
     Button addToCart;
     ImageView addItems, removeItems;
 
+
     Toolbar toolbar;
     int totalQuantity = 1;
     int totalPrice = 0;
+
+    String userType;
 
     //String documentId = "";
 
@@ -52,6 +58,9 @@ public class DetailedActivity extends AppCompatActivity {
 
     FirebaseAuth auth;
     private FirebaseFirestore firestore;
+
+    String userId;
+    DocumentReference documentReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +83,9 @@ public class DetailedActivity extends AppCompatActivity {
         firestore = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
 
+        userId = auth.getCurrentUser().getUid();
+        documentReference = firestore.collection("users").document(userId);
+
         final Object obj = getIntent().getSerializableExtra("detailed");
 
         if (obj instanceof NewProductsModel) {
@@ -95,6 +107,19 @@ public class DetailedActivity extends AppCompatActivity {
 
         addItems = findViewById(R.id.add_item);
         removeItems = findViewById(R.id.remove_item);
+
+        documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    userType = documentSnapshot.getString("userType");
+
+                    if (userType.equals("User")) {
+                        addToCart.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        });
 
         //New Products
         if (newProductsModel != null){

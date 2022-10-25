@@ -31,6 +31,9 @@ public class AddAddressActivity extends AppCompatActivity {
     FirebaseFirestore firestore;
     FirebaseAuth auth;
 
+    //Double totalAmount;
+    //Double amount = getIntent().getDoubleExtra("amount", totalAmount);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,7 +97,9 @@ public class AddAddressActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<DocumentReference> task) {
                             if (task.isSuccessful()){
                                 Toast.makeText(AddAddressActivity.this, "Address Added", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(AddAddressActivity.this, DetailedActivity.class));
+                                Intent intent = new Intent(AddAddressActivity.this, AddressActivity.class);
+                                //intent.putExtra("amount", amount);
+                                startActivity(intent);
                                 finish();
                             }
                         }

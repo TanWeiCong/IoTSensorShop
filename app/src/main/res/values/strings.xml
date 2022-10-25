@@ -22,4 +22,5 @@
     <string name="chat_room">Chat Room</string>
     <string name="chat_bot">Chatbot</string>
     <string name="video_call">Video Conference</string>
+    <string name="products">All Products</string>
 </resources>

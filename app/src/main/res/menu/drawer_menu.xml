@@ -13,17 +13,13 @@
             android:icon="@drawable/menu_profile"
             android:title="@string/profile" />
         <item
-            android:id="@+id/nav_category"
-            android:icon="@drawable/menu_category"
-            android:title="@string/category" />
+            android:id="@+id/nav_products"
+            android:icon="@drawable/products"
+            android:title="@string/products" />
         <item
-            android:id="@+id/nav_new_products"
-            android:icon="@drawable/menu_new_products"
-            android:title="@string/new_products" />
-        <item
-            android:id="@+id/nav_my_carts"
-            android:icon="@drawable/menu_my_carts"
-            android:title="@string/my_cart" />
+            android:id="@+id/nav_purchase_history"
+            android:icon="@drawable/purchase_history"
+            android:title="@string/purchase_history" />
         <item
             android:id="@+id/nav_chat_room"
             android:icon="@drawable/chat_room"

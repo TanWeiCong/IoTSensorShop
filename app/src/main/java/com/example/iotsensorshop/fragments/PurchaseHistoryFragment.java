@@ -23,6 +23,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,6 +34,7 @@ public class PurchaseHistoryFragment extends Fragment {
     RecyclerView recyclerView;
     List<PurchaseHistoryModel> list;
     PurchaseHistoryAdapter purchaseHistoryAdapter;
+    ConstraintLayout constraintLayout;
     private FirebaseAuth auth;
     private FirebaseFirestore firestore;
 
@@ -48,6 +50,7 @@ public class PurchaseHistoryFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
 
+        constraintLayout = view.findViewById(R.id.constraint_purchase_history);
         recyclerView = view.findViewById(R.id.purchase_history_rec);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         list = new ArrayList<>();
@@ -68,10 +71,28 @@ public class PurchaseHistoryFragment extends Fragment {
 
                         list.add(purchaseHistoryModel);
                         purchaseHistoryAdapter.notifyDataSetChanged();
+
+                    }
+
+                    if (purchaseHistoryAdapter.getItemCount() == 0) {
+                        constraintLayout.setVisibility(View.VISIBLE);
+                    }
+
+                    if(purchaseHistoryAdapter.getItemCount() > 0) {
+                        constraintLayout.setVisibility(View.GONE);
                     }
                 }
             }
         });
+
+        /*
+        if ( list == null || list.isEmpty() || list.get(0) == null ) {
+            constraintLayout.setVisibility(View.VISIBLE);
+        }else {
+            constraintLayout.setVisibility(View.GONE);
+        }
+
+         */
 /*
             firestore.collection("AddToCart").document(auth.getCurrentUser().getUid())
                     .collection("User").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

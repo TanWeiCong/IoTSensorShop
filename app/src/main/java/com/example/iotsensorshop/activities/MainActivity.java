@@ -20,14 +20,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.iotsensorshop.R;
-import com.example.iotsensorshop.fragments.CategoryFragment;
 import com.example.iotsensorshop.fragments.ChatRoomFragment;
 import com.example.iotsensorshop.fragments.ChatbotFragment;
 import com.example.iotsensorshop.fragments.DashboardFragment;
 import com.example.iotsensorshop.fragments.HomeFragment;
 import com.example.iotsensorshop.fragments.ManageProductFragment;
-import com.example.iotsensorshop.fragments.MyCartFragment;
-import com.example.iotsensorshop.fragments.NewProductsFragment;
 import com.example.iotsensorshop.fragments.OrderFragment;
 import com.example.iotsensorshop.fragments.ProfileFragment;
 import com.example.iotsensorshop.fragments.PurchaseHistoryFragment;
@@ -152,22 +149,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         new ProfileFragment()).commit();
                 break;
 
-            case R.id.nav_category:
+            case R.id.nav_products:
 
-                getSupportFragmentManager().beginTransaction().replace(R.id.home_container,
-                        new CategoryFragment()).commit();
-                break;
-
-            case R.id.nav_new_products:
-
-                getSupportFragmentManager().beginTransaction().replace(R.id.home_container,
-                        new NewProductsFragment()).commit();
-                break;
-
-            case R.id.nav_my_carts:
-
-                getSupportFragmentManager().beginTransaction().replace(R.id.home_container,
-                        new MyCartFragment()).commit();
+                startActivity(new Intent(MainActivity.this, ShowAllActivity.class));
+                finish();
                 break;
 
             case R.id.nav_manage_products:
@@ -268,7 +253,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
+        documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    userType = documentSnapshot.getString("userType");
+
+                    if (userType.equals("Admin")) {
+                        getMenuInflater().inflate(R.menu.admin_main_menu, menu);
+                    } else {
+                        getMenuInflater().inflate(R.menu.main_menu, menu);
+                    }
+                }
+            }
+        });
+
         return true;
     }
 

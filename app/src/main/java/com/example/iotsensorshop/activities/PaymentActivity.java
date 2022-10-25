@@ -37,7 +37,7 @@ import java.util.Map;
 
 public class PaymentActivity extends AppCompatActivity implements PaymentResultListener {
 
-    double amount = 0.0;
+    int amount = 0;
     String userId;
     String name;
     String email;
@@ -50,6 +50,9 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
 
     FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
+    //Double totalAmount;
+    //Double overallTotalAmount = getIntent().getDoubleExtra("amount", totalAmount);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +79,65 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
 
         userId = auth.getCurrentUser().getUid();
 
-        subTotal.setText(amount + "$");
+        firestore.collection("payment")
+                .document(auth.getCurrentUser().getUid())
+                .collection("User")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot doc : task.getResult()) {
+                        String documentId = doc.getId();
+                        DocumentReference documentReference = firestore.collection("payment")
+                                .document(auth.getCurrentUser().getUid())
+                                .collection("User")
+                                .document(documentId);
+
+                        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot documentSnapshot = task.getResult();
+
+                                    subTotal.setText("RM " + documentSnapshot.getString("totalAmount"));
+
+                                    int totalAmount = Integer.parseInt(documentSnapshot.getString("totalAmount"));
+                                    int discountAmount = 0;
+
+                                    if (totalAmount >= 300){
+                                        discountAmount = (int) (totalAmount * 0.1);
+
+                                        discount.setText("10%");
+                                    } else {
+                                        discount.setText("0%");
+                                    }
+
+                                    int shippingAmount = (int) (totalAmount * 0.05);
+
+                                    shipping.setText("5%");
+
+                                    int totalPrice = (totalAmount - discountAmount) + shippingAmount;
+
+                                    total.setText("RM " + totalPrice);
+
+                                    firestore.collection("payment").document(auth.getCurrentUser().getUid())
+                                            .collection("User")
+                                            .document(documentId)
+                                            .delete();
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
+
+                                    //Double shippingAmount = overallTotalAmount * 0.1;
+        //Double totalPrice = overallTotalAmount + shippingAmount;
+
+        //subTotal.setText(overallTotalAmount.toString());
+        //shipping.setText(shippingAmount.toString());
+        //total.setText(totalPrice.toString());
         
         paymentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,6 +201,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
 
                                                         firestore.collection("Order")
                                                                 .add(order);
+
                                                     }
                                                 }
                                             });
@@ -183,9 +245,9 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
             options.put("amount", amount);
             JSONObject preFill = new JSONObject();
             //email
-            preFill.put("email", "developer.kharag@gmail.com");
+            preFill.put("email", "developer.tweicong08@gmail.com");
             //contact
-            preFill.put("contact", "7489347378");
+            preFill.put("contact", "60124847833");
 
             options.put("prefill", preFill);
 

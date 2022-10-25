@@ -2,6 +2,7 @@ package com.example.iotsensorshop.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,6 +36,7 @@ public class AddressActivity extends AppCompatActivity implements AddressAdapter
 
     Button addAddress;
     RecyclerView recyclerView;
+    ConstraintLayout constraintLayout;
     private List<AddressModel> addressModelList;
     private AddressAdapter addressAdapter;
     FirebaseFirestore firestore;
@@ -42,6 +44,8 @@ public class AddressActivity extends AppCompatActivity implements AddressAdapter
     Button paymentBtn;
     Toolbar toolbar;
     String mAddress = "";
+    //Double totalAmount;
+    //Double amount = getIntent().getDoubleExtra("amount", totalAmount);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,13 +59,15 @@ public class AddressActivity extends AppCompatActivity implements AddressAdapter
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                startActivity(new Intent(AddressActivity.this, CartActivity.class));
             }
         });
 
         firestore = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
 
+
+        constraintLayout = findViewById(R.id.constraint_address);
         recyclerView = findViewById(R.id.address_recycler);
         paymentBtn = findViewById(R.id.payment_btn);
         addAddress = findViewById(R.id.add_address_btn);
@@ -81,6 +87,16 @@ public class AddressActivity extends AppCompatActivity implements AddressAdapter
                         addressModelList.add(addressModel);
                         addressAdapter.notifyDataSetChanged();
                     }
+
+                    if (addressAdapter.getItemCount() == 0) {
+                        constraintLayout.setVisibility(View.VISIBLE);
+                        paymentBtn.setVisibility(View.GONE);
+                    }
+
+                    if(addressAdapter.getItemCount() > 0) {
+                        constraintLayout.setVisibility(View.GONE);
+                        paymentBtn.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         });
@@ -90,6 +106,7 @@ public class AddressActivity extends AppCompatActivity implements AddressAdapter
             public void onClick(View view) {
 
                 Intent intent = new Intent(AddressActivity.this, PaymentActivity.class);
+                //intent.putExtra("amount", amount);
                 startActivity(intent);
             }
         });
@@ -97,7 +114,9 @@ public class AddressActivity extends AppCompatActivity implements AddressAdapter
         addAddress.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(AddressActivity.this, AddAddressActivity.class));
+                Intent intent = new Intent(AddressActivity.this, AddAddressActivity.class);
+                //intent.putExtra("amount", amount);
+                startActivity(intent);
             }
         });
     }

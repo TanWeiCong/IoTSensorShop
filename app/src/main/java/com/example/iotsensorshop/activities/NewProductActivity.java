@@ -122,7 +122,21 @@ public class NewProductActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
+        documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    userType = documentSnapshot.getString("userType");
+
+                    if (userType.equals("Admin")) {
+                        getMenuInflater().inflate(R.menu.admin_main_menu, menu);
+                    } else {
+                        getMenuInflater().inflate(R.menu.main_menu, menu);
+                    }
+                }
+            }
+        });
+
         return true;
     }
 

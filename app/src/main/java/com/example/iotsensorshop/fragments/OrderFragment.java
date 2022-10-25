@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,6 +30,7 @@ public class OrderFragment extends Fragment {
 
     Toolbar toolbar;
     RecyclerView recyclerView;
+    ConstraintLayout constraintLayout;
     List<OrderModel> list;
     OrderAdapter orderAdapter;
     private FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -44,6 +46,7 @@ public class OrderFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_order, container, false);
 
+        constraintLayout = view.findViewById(R.id.constraint_order);
         recyclerView = view.findViewById(R.id.order_rec);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         list = new ArrayList<>();
@@ -63,10 +66,25 @@ public class OrderFragment extends Fragment {
 
                         list.add(orderModel);
                         orderAdapter.notifyDataSetChanged();
+
+                    }
+
+                    if (orderAdapter.getItemCount() == 0) {
+                        constraintLayout.setVisibility(View.VISIBLE);
+                    }
+
+                    if(orderAdapter.getItemCount() > 0) {
+                        constraintLayout.setVisibility(View.GONE);
                     }
                 }
             }
         });
+
+        if ( list == null || list.isEmpty() || list.get(0) == null ) {
+            constraintLayout.setVisibility(View.VISIBLE);
+        }else {
+            constraintLayout.setVisibility(View.GONE);
+        }
 
         return view;
 

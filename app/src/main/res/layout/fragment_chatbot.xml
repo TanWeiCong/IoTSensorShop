@@ -10,6 +10,7 @@
     <!--recycler view to display our chats-->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/idRVChats"
+        android:layout_marginTop="70dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/idLLMessage" />
@@ -37,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
-            android:background="@color/purple_200"
+            android:background="@color/teal_200"
             android:src="@android:drawable/ic_menu_send"
             app:tint="@color/white" />
 
