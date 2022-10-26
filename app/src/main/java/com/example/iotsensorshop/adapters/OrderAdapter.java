@@ -46,6 +46,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
         holder.username.setText(list.get(position).getName());
         holder.userAddress.setText(list.get(position).getUserAddress());
         holder.email.setText(list.get(position).getEmail());
