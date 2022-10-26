@@ -6,6 +6,7 @@ public class OrderModel implements Serializable {
 
     String name;
     String email;
+    String userAddress;
     String documentId;
     String currentTime;
     String currentDate;
@@ -17,9 +18,10 @@ public class OrderModel implements Serializable {
     public OrderModel() {
     }
 
-    public OrderModel(String name, String email, String documentId, String currentTime, String currentDate, String productName, String productPrice, String totalQuantity, int totalPrice) {
+    public OrderModel(String name, String email, String userAddress, String documentId, String currentTime, String currentDate, String productName, String productPrice, String totalQuantity, int totalPrice) {
         this.name = name;
         this.email = email;
+        this.userAddress = userAddress;
         this.documentId = documentId;
         this.currentTime = currentTime;
         this.currentDate = currentDate;
@@ -43,6 +45,14 @@ public class OrderModel implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getUserAddress() {
+        return userAddress;
+    }
+
+    public void setUserAddress(String userAddress) {
+        this.userAddress = userAddress;
     }
 
     public String getDocumentId() {

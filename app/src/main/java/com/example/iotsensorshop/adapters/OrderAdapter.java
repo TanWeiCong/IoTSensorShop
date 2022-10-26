@@ -47,6 +47,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.username.setText(list.get(position).getName());
+        holder.userAddress.setText(list.get(position).getUserAddress());
         holder.email.setText(list.get(position).getEmail());
         holder.date.setText(list.get(position).getCurrentDate());
         holder.time.setText(list.get(position).getCurrentTime());
@@ -149,12 +150,13 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder>{
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name, price, date, time, totalQuantity, totalPrice, username, email;
+        TextView name, price, date, time, totalQuantity, totalPrice, username, email, userAddress;
         ImageView deleteItem;
         //ImageView editItem;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            userAddress = itemView.findViewById(R.id.address);
             name = itemView.findViewById(R.id.product_name);
             price = itemView.findViewById(R.id.product_price);
             date = itemView.findViewById(R.id.current_date);

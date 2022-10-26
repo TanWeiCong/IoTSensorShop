@@ -189,18 +189,52 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
                                                         name = documentSnapshotOrder.getString("Name");
                                                         email = documentSnapshotOrder.getString("Email");
 
-                                                        Map<String, Object> order = new HashMap<>();
-                                                        order.put("currentDate", documentSnapshot.getString("currentDate"));
-                                                        order.put("currentTime", documentSnapshot.getString("currentTime"));
-                                                        order.put("productName", documentSnapshot.getString("productName"));
-                                                        order.put("productPrice", documentSnapshot.getString("productPrice"));
-                                                        order.put("totalPrice", documentSnapshot.getDouble("totalPrice").intValue());
-                                                        order.put("totalQuantity", documentSnapshot.getString("totalQuantity"));
-                                                        order.put("name", name);
-                                                        order.put("email", email);
+                                                        firestore.collection("orderAddress")
+                                                                .document(auth.getCurrentUser().getUid())
+                                                                .collection("User")
+                                                                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                if (task.isSuccessful()) {
+                                                                    for (DocumentSnapshot documentSnapshotAddress : task.getResult()) {
+                                                                        String documentId = documentSnapshotAddress.getId();
+                                                                        DocumentReference documentReferenceAddress = firestore.collection("orderAddress")
+                                                                                .document(auth.getCurrentUser().getUid())
+                                                                                .collection("User")
+                                                                                .document(documentId);
 
-                                                        firestore.collection("Order")
-                                                                .add(order);
+                                                                        documentReferenceAddress.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                                            @Override
+                                                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                                                if (task.isSuccessful()) {
+                                                                                    DocumentSnapshot documentSnapshotAddress = task.getResult();
+                                                                                    String address = documentSnapshotAddress.getString("address");
+
+                                                                                    Map<String, Object> order = new HashMap<>();
+                                                                                    order.put("currentDate", documentSnapshot.getString("currentDate"));
+                                                                                    order.put("currentTime", documentSnapshot.getString("currentTime"));
+                                                                                    order.put("productName", documentSnapshot.getString("productName"));
+                                                                                    order.put("productPrice", documentSnapshot.getString("productPrice"));
+                                                                                    order.put("totalPrice", documentSnapshot.getDouble("totalPrice").intValue());
+                                                                                    order.put("totalQuantity", documentSnapshot.getString("totalQuantity"));
+                                                                                    order.put("name", name);
+                                                                                    order.put("email", email);
+                                                                                    order.put("userAddress", address);
+
+                                                                                    firestore.collection("Order")
+                                                                                            .add(order);
+
+                                                                                    firestore.collection("orderAddress").document(auth.getCurrentUser().getUid())
+                                                                                            .collection("User")
+                                                                                            .document(documentId)
+                                                                                            .delete();
+                                                                                }
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                }
+                                                            }
+                                                        });
                                                     }
                                                 }
                                             });
