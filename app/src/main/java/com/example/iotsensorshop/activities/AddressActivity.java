@@ -24,6 +24,7 @@ import com.example.iotsensorshop.models.ShowAllModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -59,6 +60,36 @@ public class AddressActivity extends AppCompatActivity implements AddressAdapter
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                firestore.collection("orderAddress")
+                        .document(auth.getCurrentUser().getUid())
+                        .collection("User")
+                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                                String documentId = documentSnapshot.getId();
+                                DocumentReference documentReferencePay = firestore.collection("orderAddress")
+                                        .document(auth.getCurrentUser().getUid())
+                                        .collection("User")
+                                        .document(documentId);
+
+                                documentReferencePay.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            firestore.collection("orderAddress").document(auth.getCurrentUser().getUid())
+                                                    .collection("User")
+                                                    .document(documentId)
+                                                    .delete();
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    }
+                });
+
                 startActivity(new Intent(AddressActivity.this, CartActivity.class));
             }
         });

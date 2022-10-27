@@ -94,6 +94,36 @@ public class CartActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                firestore.collection("payment")
+                        .document(auth.getCurrentUser().getUid())
+                        .collection("User")
+                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                                String documentId = documentSnapshot.getId();
+                                DocumentReference documentReferencePay = firestore.collection("payment")
+                                        .document(auth.getCurrentUser().getUid())
+                                        .collection("User")
+                                        .document(documentId);
+
+                                documentReferencePay.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            firestore.collection("payment").document(auth.getCurrentUser().getUid())
+                                                    .collection("User")
+                                                    .document(documentId)
+                                                    .delete();
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    }
+                });
+
                 startActivity(new Intent(CartActivity.this, MainActivity.class));
             }
         });
