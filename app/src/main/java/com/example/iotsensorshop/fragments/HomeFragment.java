@@ -291,16 +291,16 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.toString().isEmpty()) {
+                if ((s.toString().trim()).isEmpty()) {
                     showAllModelList.clear();
                     showAllAdapter.notifyDataSetChanged();
                 } else {
-                    searchProduct(s.toString());
+                    searchProduct((s.toString().trim()));
                 }
             }
 
             private void searchProduct(String name) {
-                if (!name.isEmpty()) {
+                if (!(name.trim()).isEmpty()) {
                     db.collection("ShowAll").whereEqualTo("name", name).get()
                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                 @Override
