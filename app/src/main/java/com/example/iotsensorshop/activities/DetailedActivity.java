@@ -194,6 +194,16 @@ public class DetailedActivity extends AppCompatActivity {
                 if (totalQuantity > 1){
                     totalQuantity --;
                     quantity.setText(String.valueOf(totalQuantity));
+
+                    if (newProductsModel != null) {
+                        totalPrice = newProductsModel.getPrice() * totalQuantity;
+                    }
+                    if (popularProductsModel != null) {
+                        totalPrice = popularProductsModel.getPrice() * totalQuantity;
+                    }
+                    if (showAllModel != null)  {
+                        totalPrice = showAllModel.getPrice() * totalQuantity;
+                    }
                 }else {
                     Toast.makeText(DetailedActivity.this, "The Minimum Quantity is 1!", Toast.LENGTH_SHORT).show();
                 }
