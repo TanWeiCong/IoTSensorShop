@@ -79,8 +79,10 @@ public class RegistrationActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
-        
+
          */
+
+
 /*
         mChangeUserTypeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
