@@ -64,6 +64,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
         clickcount = 0;
 
+        /*
         sharedPreferences = getSharedPreferences("onBoardingScreen", MODE_PRIVATE);
 
         boolean isFirstTime = sharedPreferences.getBoolean("firstTime", true);
@@ -78,6 +79,8 @@ public class RegistrationActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+        
+         */
 /*
         mChangeUserTypeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
